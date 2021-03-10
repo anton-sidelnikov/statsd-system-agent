@@ -1,21 +1,20 @@
 import debug from 'debug'
 import { snakeCase } from 'change-case'
-import { statsdClient } from '../../utils/statsd-client';
+import { statsdClient } from '../../utils/statsd-client'
 
 const debugSt = debug('statsd-agent:statistic')
 
 export class Statistic {
-    private statsdName: string;
-    private value: never;
+    private statsdName: string
+    private value: any
 
-    constructor(statsdName: string, value: never) {
-        this.statsdName = statsdName.split('.').map((s: string) => snakeCase(s)).join('.');
-        this.value = value;
+    constructor(statsdName: string, value: any) {
+        this.statsdName = statsdName.split('.').map((s: string) => snakeCase(s)).join('.')
+        this.value = value
     }
 
     send() {
-        debugSt('Sending statistic %s = %d', this.statsdName, this.value);
-
-        statsdClient.gauge(this.statsdName, this.value);
+        debugSt('Sending statistic %s = %d', this.statsdName, this.value)
+        statsdClient.gauge(this.statsdName, this.value)
     }
 }
