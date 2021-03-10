@@ -1,4 +1,5 @@
 export interface ConfigDefault {
+    statisticBlackList: string[];
     monitorFilenames: string[]
     collectStatisticsInterval: number
     sendStatisticsInterval: number
@@ -13,6 +14,7 @@ interface StatsdConfig {
 
 export function createDefaultConfig(): ConfigDefault {
     return {
+        statisticBlackList: [],
         monitorFilenames: ['cpu-monitor', 'default-memory-monitor', 'disk-monitor', 'network-monitor'],
         collectStatisticsInterval: 10*1000,
         sendStatisticsInterval: 10*1000,
