@@ -13,14 +13,15 @@ if (!_.isEmpty(config.statisticBlackList)) {
 }
 
 export class Monitor {
-    private name: any;
-    private statistics: any[]
+    private statistics: any[];
+    private name: string;
 
-    constructor(name: any) {
+    constructor(name: string) {
         this.name = name
         this.statistics = []
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     setStatistics(statisticsPairs: any[]) {
         debugMon('Setting statistics (%s)...', this.name, statisticsPairs)
 
@@ -36,6 +37,7 @@ export class Monitor {
                     new Statistic(`${this.name}.${statisticsPair[0]}`, statisticsPair[1]))
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     sendStatistics() {
         debug('Sending statistics...')
 
@@ -48,6 +50,7 @@ export class Monitor {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     clearStatistics() {
         this.statistics = []
     }
