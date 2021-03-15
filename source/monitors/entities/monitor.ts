@@ -1,14 +1,14 @@
 import { loadCustomConfiguration } from '../../config';
 import { Statistic } from './stat'
 import debug from 'debug'
-import _ from 'underscore'
+import { isEmpty } from 'underscore'
 
 const config = loadCustomConfiguration()
 
 const debugMon = debug('statsd-agent:statistic')
 let statisticBlackList: Set<string>
 
-if (!_.isEmpty(config.statisticBlackList)) {
+if (!isEmpty(config.statisticBlackList)) {
     statisticBlackList = new Set(config.statisticBlackList.map(statisticName => statisticName.toLowerCase()))
 }
 

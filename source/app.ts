@@ -43,7 +43,7 @@ function sendStatistics() {
     }
 }
 
-function start() {
+export function start() {
     loadMonitors();
 
     console.log('Start collecting statistics...');
