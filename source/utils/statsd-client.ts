@@ -18,7 +18,6 @@ if (statsdConfig.debug) {
     StatsdClient.prototype.sendMessage =
         _.wrap(StatsdClient.prototype.sendMessage, function (originalSendMessage, message, callback) {
             console.log('send metric', message)
-
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             originalSendMessage.call(this, message, callback)
