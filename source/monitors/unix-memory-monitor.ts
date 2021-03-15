@@ -6,18 +6,17 @@ export class MemoryMonitor extends Monitor {
         super('memory');
     }
 
-    collect() {
-        let freeMem, totalMem, usedMem
-        mem().then(data => {
-            freeMem = data.free
-            totalMem = data.total
-            usedMem = data.used
-        }).catch(error => console.error('Memory info cannot be read', error.stack || error))
-
-        this.setStatistics([
-            ['free', freeMem],
-            ['total', totalMem],
-            ['used', usedMem],
-        ])
+    async collect(): Promise<void> {
+        const data = await mem()
+        try {
+            this.setStatistics([
+                ['free', data.free],
+                ['total', data.total],
+                ['used', data.used],
+            ])
+        }
+        catch (e) {
+            console.error('Memory info cannot be read', e.stack || e)
+        }
     }
 }

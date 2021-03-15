@@ -1,14 +1,22 @@
 import { Monitor } from './entities/monitor';
 import * as os from 'os';
 
+interface CpuTimes {
+    idle: number
+    irq: number
+    sys: number
+    user: number
+    nice: number
+}
+
 export class CpuMonitor extends Monitor {
-    public currentCpuTimes: { idle: number; irq: number; sys: number; user: number; nice: number; } | undefined;
+    public currentCpuTimes: CpuTimes | undefined;
 
     constructor() {
         super('cpu');
     }
 
-    collect() {
+    collect(): void {
         const intervalCpuTimes = this.getIntervalCpuTimes();
 
         if (intervalCpuTimes == null)
@@ -26,7 +34,7 @@ export class CpuMonitor extends Monitor {
         ]);
     }
 
-    getIntervalCpuTimes() {
+    getIntervalCpuTimes(): CpuTimes | null {
         const newCpuTimes = this.getCpuTimes();
 
         if (this.currentCpuTimes == null) {
@@ -48,7 +56,7 @@ export class CpuMonitor extends Monitor {
         return intervalCpuTimes;
     }
 
-    getCpuTimes() {
+    getCpuTimes(): CpuTimes {
         const cpusInfo = os.cpus();
 
         const newCpuTimes = {

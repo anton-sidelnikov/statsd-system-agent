@@ -6,7 +6,7 @@ export class MemoryMonitor extends Monitor {
         super('memory');
     }
 
-    collect() {
+    collect(): void {
         const freemem = os.freemem();
         const totalmem = os.totalmem();
 

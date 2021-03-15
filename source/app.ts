@@ -37,7 +37,7 @@ function loadMonitors() {
             }
             break
         default:
-            console.error('Unknown monitor');
+            console.log(`Monitor ${monitorName} not implemented`);
             break
         }
     }
