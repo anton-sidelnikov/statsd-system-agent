@@ -1,5 +1,8 @@
 import { loadCustomConfiguration } from './config'
 import { CpuMonitor } from './monitors/cpu-monitor'
+import { MemoryMonitor as defMem } from './monitors/default-memory-monitor';
+import { MemoryMonitor as UnMem } from './monitors/unix-memory-monitor';
+
 const config = loadCustomConfiguration()
 const monitors: any[] = [];
 
@@ -8,13 +11,34 @@ function loadMonitors() {
 
     for (let i = 0; i < monitorNames.length; i++) {
         const monitorName = monitorNames[i];
-        if (monitorName === 'cpu-monitor') {
+        switch (monitorName) {
+        case 'cpu-monitor':
             try {
                 const monitor = new CpuMonitor()
                 monitors.push(monitor);
             } catch (err) {
                 console.error(`Could not load monitor ${monitorName}`, err.stack || err);
             }
+            break
+        case 'default-memory-monitor':
+            try {
+                const monitor = new defMem()
+                monitors.push(monitor);
+            } catch (err) {
+                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
+            }
+            break
+        case 'unix-memory-monitor':
+            try {
+                const monitor = new UnMem()
+                monitors.push(monitor);
+            } catch (err) {
+                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
+            }
+            break
+        default:
+            console.error('Unknown monitor');
+            break
         }
     }
 
