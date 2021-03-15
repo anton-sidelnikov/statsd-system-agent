@@ -13,8 +13,8 @@ if (!_.isEmpty(config.statisticBlackList)) {
 }
 
 export class Monitor {
-    private statistics: any[];
-    private name: string;
+    public statistics: any[];
+    public name: string;
 
     constructor(name: string) {
         this.name = name

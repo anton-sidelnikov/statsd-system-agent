@@ -2,7 +2,7 @@ import { Monitor } from './entities/monitor';
 import * as os from 'os';
 
 export class CpuMonitor extends Monitor {
-    private currentCpuTimes: { idle: number; irq: number; sys: number; user: number; nice: number; } | undefined;
+    public currentCpuTimes: { idle: number; irq: number; sys: number; user: number; nice: number; } | undefined;
 
     constructor() {
         super('cpu');

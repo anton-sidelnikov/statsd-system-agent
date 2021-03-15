@@ -4,16 +4,16 @@ const config = loadCustomConfiguration()
 const monitors: any[] = [];
 
 function loadMonitors() {
-    const monitorFilenames = config.monitorFilenames;
+    const monitorNames = config.monitorNames;
 
-    for (let i = 0; i < monitorFilenames.length; i++) {
-        const monitorFilename = monitorFilenames[i];
-        if (monitorFilename === 'cpu-monitor') {
+    for (let i = 0; i < monitorNames.length; i++) {
+        const monitorName = monitorNames[i];
+        if (monitorName === 'cpu-monitor') {
             try {
                 const monitor = new CpuMonitor()
                 monitors.push(monitor);
             } catch (err) {
-                console.error(`Could not load monitor ${monitorFilename}`, err.stack || err);
+                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
             }
         }
     }
@@ -43,7 +43,7 @@ function sendStatistics() {
     }
 }
 
-export function start() {
+function start() {
     loadMonitors();
 
     console.log('Start collecting statistics...');

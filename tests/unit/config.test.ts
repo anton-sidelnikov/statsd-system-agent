@@ -7,7 +7,7 @@ import { loadCustomConfiguration } from '../../source/config';
 
 test('simple default config load', () => {
     const config = loadCustomConfiguration()
-    expect(config.monitorFilenames).toEqual( ['cpu-monitor','default-memory-monitor','disk-monitor','network-monitor'])
+    expect(config.monitorNames).toEqual( ['cpu-monitor','default-memory-monitor','disk-monitor','network-monitor'])
     expect(config.collectStatisticsInterval).toEqual( 10000)
     expect(config.sendStatisticsInterval).toEqual( 10000)
     expect(config.statsdConfig).toEqual({
