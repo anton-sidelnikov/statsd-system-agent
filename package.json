@@ -48,6 +48,7 @@
     "change-case": "^4.1.2",
     "console-stamp": "^0.2.9",
     "debug": "^4.3.1",
+    "drivelist": "^9.2.4",
     "fs-extra": "^9.1.0",
     "hot-shots": "^8.3.0",
     "systeminformation": "^5.6.4",
