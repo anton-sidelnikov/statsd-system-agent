@@ -15,7 +15,7 @@ interface StatsdConfig {
 export function createDefaultConfig(): ConfigDefault {
     return {
         statisticBlackList: [],
-        monitorNames: ['cpu-monitor', 'default-memory-monitor', 'disk-monitor', 'network-monitor'],
+        monitorNames: ['cpu-monitor', 'memory-monitor', 'disk-monitor', 'network-monitor'],
         collectStatisticsInterval: 10*1000,
         sendStatisticsInterval: 10*1000,
         statsdConfig: {

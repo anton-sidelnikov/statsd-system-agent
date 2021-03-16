@@ -1,7 +1,6 @@
 import { loadCustomConfiguration } from './config'
 import { CpuMonitor } from './monitors/cpu-monitor'
-import { MemoryMonitor as defMem } from './monitors/default-memory-monitor';
-import { MemoryMonitor as UnMem } from './monitors/unix-memory-monitor';
+import { MemoryMonitor as UnMem } from './monitors/memory-monitor';
 
 const config = loadCustomConfiguration()
 const monitors: any[] = [];
@@ -20,15 +19,7 @@ function loadMonitors() {
                 console.error(`Could not load monitor ${monitorName}`, err.stack || err);
             }
             break
-        case 'default-memory-monitor':
-            try {
-                const monitor = new defMem()
-                monitors.push(monitor);
-            } catch (err) {
-                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
-            }
-            break
-        case 'unix-memory-monitor':
+        case 'memory-monitor':
             try {
                 const monitor = new UnMem()
                 monitors.push(monitor);
@@ -45,12 +36,12 @@ function loadMonitors() {
     console.log(`${monitors.length} monitors loaded.`);
 }
 
-function collectStatistics() {
+async function collectStatistics() {
     for (let i = 0; i < monitors.length; i++) {
         const monitor = monitors[i];
 
         console.log(`Collecting statistics (${monitor.name} monitor)...`);
-        monitor.collect();
+        await monitor.collect();
         console.log(`Collected statistics (${monitor.name} monitor)...`);
     }
 }
@@ -67,7 +58,7 @@ function sendStatistics() {
     }
 }
 
-export function start() {
+export function start(): void {
     loadMonitors();
 
     console.log('Start collecting statistics...');

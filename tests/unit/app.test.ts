@@ -5,8 +5,7 @@
 import { Statistic } from '../../source/monitors/entities/stat';
 import WS from 'jest-websocket-mock';
 import { CpuMonitor } from '../../source/monitors/cpu-monitor';
-import { MemoryMonitor as DefMem } from '../../source/monitors/default-memory-monitor';
-import { MemoryMonitor as UnMem } from '../../source/monitors/unix-memory-monitor';
+import { MemoryMonitor as UnMem } from '../../source/monitors/memory-monitor';
 
 const server = new WS('ws://localhost:8125');
 
@@ -36,17 +35,7 @@ test('cpu-monitor', () => {
     expect(monitor.statistics).toEqual([])
 })
 
-test('default-memory-monitor', () => {
-    const monitor = new DefMem()
-    expect(monitor.name).toEqual('memory')
-    // set statistics
-    monitor.collect()
-    expect(monitor.statistics.length).toEqual(3)
-    monitor.clearStatistics()
-    expect(monitor.statistics).toEqual([])
-})
-
-test('unix-memory-monitor', async () => {
+test('memory-monitor', async () => {
     const monitor = new UnMem()
     expect(monitor.name).toEqual('memory')
     // set statistics
