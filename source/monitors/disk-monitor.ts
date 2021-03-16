@@ -1,5 +1,5 @@
 import { Monitor } from './entities/monitor'
-import { list } from 'drivelist'
+import {disksIO} from 'systeminformation'
 
 export class DiskMonitor extends Monitor {
     constructor() {
@@ -7,14 +7,25 @@ export class DiskMonitor extends Monitor {
     }
 
     async collect(): Promise<void> {
-        const drives = await list()
-        for (const drv of drives){
-            const deviceMountPath = drv.mountpoints && drv.mountpoints[0] && drv.mountpoints[0].path
-            if (deviceMountPath == null)
-                return
-            this.setStatistics ([
-                [`${deviceMountPath}.path`, deviceMountPath],
+        const diskStatisticsList: string | any[] = []
+        const data = await disksIO()
+        try {
+            this.setStatistics([
+                ['all', data],
             ])
         }
+        catch (e) {
+            console.error('Memory info cannot be read', e.stack || e)
+        }
+        // usageRead({ device: deviceName }, function (bytesPerSecond: any){
+        //     diskStatisticsList.push(`${deviceName}`, bytesPerSecond)
+        // })
+
+        const allStatistics: any[] = [];
+        for (let i = 0; i < diskStatisticsList.length; i++) {
+            const diskStatistics = diskStatisticsList[i];
+            Array.prototype.push.apply(allStatistics, diskStatistics);
+        }
+        this.setStatistics (allStatistics)
     }
 }

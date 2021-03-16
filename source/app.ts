@@ -1,6 +1,7 @@
 import { loadCustomConfiguration } from './config'
 import { CpuMonitor } from './monitors/cpu-monitor'
-import { MemoryMonitor as UnMem } from './monitors/memory-monitor';
+import { MemoryMonitor } from './monitors/memory-monitor';
+import { NetworkMonitor } from './monitors/network-monitor';
 
 const config = loadCustomConfiguration()
 const monitors: any[] = [];
@@ -21,7 +22,15 @@ function loadMonitors() {
             break
         case 'memory-monitor':
             try {
-                const monitor = new UnMem()
+                const monitor = new MemoryMonitor()
+                monitors.push(monitor);
+            } catch (err) {
+                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
+            }
+            break
+        case 'network-monitor':
+            try {
+                const monitor = new NetworkMonitor()
                 monitors.push(monitor);
             } catch (err) {
                 console.error(`Could not load monitor ${monitorName}`, err.stack || err);
