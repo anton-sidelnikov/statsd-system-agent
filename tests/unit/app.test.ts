@@ -51,7 +51,7 @@ test('disk-monitor', async () => {
     expect(monitor.name).toEqual('disk')
     // set statistics
     await monitor.collect()
-    expect(monitor.statistics.length).toEqual(3)
+    expect(monitor.statistics.length).toEqual(1)
     monitor.clearStatistics()
     expect(monitor.statistics).toEqual([])
 })
