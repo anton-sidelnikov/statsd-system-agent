@@ -8,6 +8,7 @@ export interface ConfigDefault {
 
 interface StatsdConfig {
     prefix: string
+    env: string
     host: string
     debug: boolean
 }
@@ -19,7 +20,8 @@ export function createDefaultConfig(): ConfigDefault {
         collectStatisticsInterval: 10*1000,
         sendStatisticsInterval: 10*1000,
         statsdConfig: {
-            prefix: 'system',
+            prefix: 'csm',
+            env: 'production_eu-de',
             host: 'localhost',
             debug: false
         }

@@ -10,8 +10,8 @@ export const statsdClient = new StatsdClient({
     cacheDns: true,
     telegraf: true,
     errorHandler: err => console.error(err.stack || err),
-    prefix: `${statsdConfig.prefix}.`,
-    globalTags: { host: hostname() }
+    prefix: `${statsdConfig.prefix}.${statsdConfig.env}.system.${hostname()}_`,
+    globalTags: {}
 })
 
 if (statsdConfig.debug) {
