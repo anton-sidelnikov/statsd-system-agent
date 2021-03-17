@@ -2,7 +2,7 @@ import { loadCustomConfiguration } from './config'
 import { CpuMonitor } from './monitors/cpu-monitor'
 import { MemoryMonitor } from './monitors/memory-monitor';
 import { NetworkMonitor } from './monitors/network-monitor';
-import { DiskMonitor } from "./monitors/disk-monitor";
+import { DiskMonitor } from './monitors/disk-monitor';
 
 const config = loadCustomConfiguration()
 const monitors: any[] = [];
