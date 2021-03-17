@@ -2,6 +2,7 @@ import { loadCustomConfiguration } from './config'
 import { CpuMonitor } from './monitors/cpu-monitor'
 import { MemoryMonitor } from './monitors/memory-monitor';
 import { NetworkMonitor } from './monitors/network-monitor';
+import { DiskMonitor } from "./monitors/disk-monitor";
 
 const config = loadCustomConfiguration()
 const monitors: any[] = [];
@@ -31,6 +32,14 @@ function loadMonitors() {
         case 'network-monitor':
             try {
                 const monitor = new NetworkMonitor()
+                monitors.push(monitor);
+            } catch (err) {
+                console.error(`Could not load monitor ${monitorName}`, err.stack || err);
+            }
+            break
+        case 'disk-monitor':
+            try {
+                const monitor = new DiskMonitor()
                 monitors.push(monitor);
             } catch (err) {
                 console.error(`Could not load monitor ${monitorName}`, err.stack || err);

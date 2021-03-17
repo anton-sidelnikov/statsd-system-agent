@@ -7,6 +7,7 @@ import WS from 'jest-websocket-mock';
 import { CpuMonitor } from '../../source/monitors/cpu-monitor';
 import { MemoryMonitor } from '../../source/monitors/memory-monitor';
 import { NetworkMonitor } from '../../source/monitors/network-monitor';
+import { DiskMonitor } from '../../source/monitors/disk-monitor';
 
 const server = new WS('ws://localhost:8125');
 
@@ -52,6 +53,16 @@ test('network-monitor',async () => {
     // set statistics
     await monitor.collect()
     expect(monitor.statistics.length).toEqual(7)
+    monitor.clearStatistics()
+    expect(monitor.statistics).toEqual([])
+})
+
+test('disk-monitor',async () => {
+    const monitor = new DiskMonitor()
+    expect(monitor.name).toEqual('disk')
+    // set statistics
+    await monitor.collect()
+    expect(monitor.statistics).not.toEqual([])
     monitor.clearStatistics()
     expect(monitor.statistics).toEqual([])
 })

@@ -1,31 +1,45 @@
 import { Monitor } from './entities/monitor'
-import {disksIO} from 'systeminformation'
+import { blockDevices } from 'systeminformation'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { raw } from 'disk-stat'
 
+//only on *nix system
 export class DiskMonitor extends Monitor {
     constructor() {
         super('disk');
     }
 
     async collect(): Promise<void> {
-        const diskStatisticsList: string | any[] = []
-        const data = await disksIO()
+        const disksList: string[] = []
+        const diskStatisticsList: string[][] = []
+        const data = await blockDevices()
         try {
-            this.setStatistics([
-                ['all', data],
-            ])
+            for (const disk of data){
+                disksList.push(disk.name)
+            }
         }
         catch (e) {
-            console.error('Memory info cannot be read', e.stack || e)
+            console.error('Disk info cannot be read', e.stack || e)
         }
-        // usageRead({ device: deviceName }, function (bytesPerSecond: any){
-        //     diskStatisticsList.push(`${deviceName}`, bytesPerSecond)
-        // })
-
-        const allStatistics: any[] = [];
-        for (let i = 0; i < diskStatisticsList.length; i++) {
-            const diskStatistics = diskStatisticsList[i];
-            Array.prototype.push.apply(allStatistics, diskStatistics);
+        const disksInfo = raw()
+        const statisticsList = []
+        for (const disk of disksList) {
+            statisticsList.push(
+                ['readsCompleted', disksInfo[disk].readsCompleted],
+                ['readsMerged', disksInfo[disk].readsMerged],
+                ['sectorsRead', disksInfo[disk].sectorsRead],
+                ['msReading', disksInfo[disk].msReading],
+                ['writesCompleted', disksInfo[disk].writesCompleted],
+                ['writesMerged', disksInfo[disk].writesMerged],
+                ['sectorsWritten', disksInfo[disk].sectorsWritten],
+                ['msWriting', disksInfo[disk].msWriting],
+                ['iosPending', disksInfo[disk].iosPending],
+                ['msIo', disksInfo[disk].msIo],
+                ['msWeightedIo', disksInfo[disk].msWeightedIo])
+            for (const stat of statisticsList)
+                diskStatisticsList.push([`${disk}_${stat[0]}`, stat[1]])
         }
-        this.setStatistics (allStatistics)
+        this.setStatistics (diskStatisticsList)
     }
 }
