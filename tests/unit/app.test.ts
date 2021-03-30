@@ -15,14 +15,26 @@ afterAll(() => {
     server.close()
 })
 
+const testConfig = {
+    'statisticBlackList':[],
+    'monitorNames':['cpu-monitor','memory-monitor','disk-monitor','network-monitor'],
+    'collectStatisticsInterval':10000,
+    'sendStatisticsInterval':10000,
+    'statsdConfig':{
+        'prefix':'csm',
+        'env':'production_eu-de',
+        'host':'localhost',
+        'debug':false
+    }
+}
 test('statistic push', () => {
-    const testStat = new Statistic ('cpu.user','2.96')
+    const testStat = new Statistic (testConfig,'cpu.user','2.96')
     const resp = testStat.send()
     expect(resp).toEqual(true)
 })
 
 test('cpu-monitor', () => {
-    const monitor = new CpuMonitor()
+    const monitor = new CpuMonitor(testConfig)
     expect(monitor.name).toEqual('cpu')
     // set currentCpuTimes
     monitor.collect()
@@ -38,7 +50,7 @@ test('cpu-monitor', () => {
 })
 
 test('memory-monitor', async () => {
-    const monitor = new MemoryMonitor()
+    const monitor = new MemoryMonitor(testConfig)
     expect(monitor.name).toEqual('memory')
     // set statistics
     await monitor.collect()
@@ -48,7 +60,7 @@ test('memory-monitor', async () => {
 })
 
 test('network-monitor',async () => {
-    const monitor = new NetworkMonitor()
+    const monitor = new NetworkMonitor(testConfig)
     expect(monitor.name).toEqual('network')
     // set statistics
     await monitor.collect()
@@ -58,7 +70,7 @@ test('network-monitor',async () => {
 })
 
 test('disk-monitor',async () => {
-    const monitor = new DiskMonitor()
+    const monitor = new DiskMonitor(testConfig)
     expect(monitor.name).toEqual('disk')
     // set statistics
     await monitor.collect()

@@ -1,5 +1,6 @@
 import { Monitor } from './entities/monitor';
 import * as os from 'os';
+import { ConfigDefault } from '../config.default';
 
 interface CpuTimes {
     idle: number
@@ -9,29 +10,38 @@ interface CpuTimes {
     nice: number
 }
 
-export class CpuMonitor extends Monitor {
-    public currentCpuTimes: CpuTimes | undefined;
+function round(value: number, total: number, fraction = 2): string {
+    return ((value / total) * 100).toFixed(fraction)
+}
 
-    constructor() {
-        super('cpu');
+export class CpuMonitor extends Monitor {
+    public currentCpuTimes: CpuTimes | undefined
+
+    constructor(config: ConfigDefault) {
+        super(config, 'cpu')
     }
 
     collect(): void {
         const intervalCpuTimes = this.getIntervalCpuTimes();
-
         if (intervalCpuTimes == null)
             return;
 
         const totalIntervalCpuTime =
-            intervalCpuTimes.user + intervalCpuTimes.nice + intervalCpuTimes.sys + intervalCpuTimes.idle + intervalCpuTimes.irq;
+            +intervalCpuTimes.user
+            + intervalCpuTimes.nice
+            + intervalCpuTimes.sys
+            + intervalCpuTimes.idle
+            + intervalCpuTimes.irq
 
-        this.setStatistics([
-            ['user', ((intervalCpuTimes.user / totalIntervalCpuTime) * 100).toFixed(2)],
-            ['nice', ((intervalCpuTimes.nice / totalIntervalCpuTime) * 100).toFixed(2)],
-            ['sys', ((intervalCpuTimes.sys / totalIntervalCpuTime) * 100).toFixed(2)],
-            ['idle', ((intervalCpuTimes.idle / totalIntervalCpuTime) * 100).toFixed(2)],
-            ['irq', ((intervalCpuTimes.irq / totalIntervalCpuTime) * 100).toFixed(2)]
-        ]);
+        this.setStatistics(
+            Object.entries({
+                'user': round(intervalCpuTimes.user, totalIntervalCpuTime),
+                'nice': round(intervalCpuTimes.nice, totalIntervalCpuTime),
+                'sys': round(intervalCpuTimes.sys, totalIntervalCpuTime),
+                'idle': round(intervalCpuTimes.idle, totalIntervalCpuTime),
+                'irq': round(intervalCpuTimes.irq, totalIntervalCpuTime)
+            })
+        )
     }
 
     getIntervalCpuTimes(): CpuTimes | null {
@@ -65,17 +75,15 @@ export class CpuMonitor extends Monitor {
             sys: 0,
             idle: 0,
             irq: 0
-        };
+        }
 
-        for (let i = 0; i < cpusInfo.length; i++) {
-            const cpu = cpusInfo[i];
-
+        cpusInfo.forEach(cpu => {
             newCpuTimes.user += cpu.times.user;
             newCpuTimes.nice += cpu.times.nice;
             newCpuTimes.sys += cpu.times.sys;
             newCpuTimes.idle += cpu.times.idle;
             newCpuTimes.irq += cpu.times.irq;
-        }
+        })
 
         return newCpuTimes;
     }
